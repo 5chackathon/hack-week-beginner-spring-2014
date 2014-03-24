@@ -1,63 +1,64 @@
-function appendItem(text) {
-    $(".items").append('<tr><td>'+ text+ '</td> <td><button class="delete" onclick="removeItem(this)">Delete</button></td></tr>');
-    // clear the text field
-    $("#todoVal").val('');
+// Adds a to-do list item containing the text 'itemText' to the HTML
+function appendItem(itemText) {
+    // Create the HTML
+    var item = $('<li>')
+
+    var itemText = $('<span/>').addClass('itemText').text(itemText);
+    item.append(itemText);
+
+    var deleteButton = $('<button/>').addClass('delete').text('Delete');
+    item.append(deleteButton);
+
+    deleteButton.click(function() {
+        removeItem($(item));
+    });
+
+    $('#items').append(item);
 }
 
+// Gets the text in the text box and adds an item to the list
 function addItem() {
-	// the text to be added
-	var text = $("#todoVal").val();
-	console.log(text);
-	if (text != "") {
-		appendItem(text);
+    var text = $("#todoValue").val();
 
-        saveItem(text);
-	}
+    if (text) {
+        appendItem(text);
+        saveItems();
+        $("#todoValue").val('');
+    }
 }
 
+// Removes an item from the to-do list
 function removeItem(item) {
-	console.log($(item).parent());
-    deleteItem(item);
-	$(item).parent().parent().remove();
+    $(item).remove();
+    saveItems();
 }
 
-function getTodoList() {
-    if (localStorage["todo"] == null) {
-        localStorage["todo"] = "[]";
-    }
-    
-    return JSON.parse(localStorage["todo"]);
+// Saves the current to-do list items to localStorage
+function saveItems() {
+    var list = [];
+
+    // Get only the text of each to-do list item
+    $('#items li span').each(function() {
+        list.push($(this).text());
+    })
+
+    localStorage['todo'] = JSON.stringify(list);
 }
 
+// Load the to-do list from local storage into the app
 function loadItems() {
-    var list = getTodoList();
+    if (!localStorage['todo']) {
+        return;
+    }
 
-    for (l in list) {
-        appendItem(list[l]);
+    var list = JSON.parse(localStorage['todo']);
+
+    for (var i = 0; i < list.length; i++) {
+        appendItem(list[i]);
     }
 }
-
-function saveItem(item) {
-    var list = getTodoList();
-    list.push(item);
-
-    localStorage["todo"] = JSON.stringify(list);
-}
-
-function deleteItem(item) {
-    var list = getTodoList();
-
-    index = list.indexOf(item);
-    list.splice(index,1);
-
-    localStorage["todo"] = JSON.stringify(list);
-}
-
 
 $(function() {
-	$("#add").on("click", addItem);
+    $('#add').on('click', addItem);
     loadItems();
-	$()
 });
-
-

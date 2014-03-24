@@ -20,7 +20,7 @@ h2 {
 input[type=text] {
     border: 2px solid #ccc;
     padding: 5px;
-    font-size: 1em; 
+    font-size: 1em;
 }
 
 .page {
@@ -31,7 +31,7 @@ input[type=text] {
    background: white;
 }
 
-.entries {
+#items {
     list-style: none;
     margin-left: 0;
     padding-left: 0;
@@ -42,8 +42,13 @@ input[type=text] {
 }
 
 .entry-info {
-    margin-top: 0; 
+    margin-top: 0;
 }
-.items{
-  padding-left: 10px;
+
+#items {
+    padding-left: 10px;
+}
+
+.itemText {
+    padding-right: 10px;
 }
