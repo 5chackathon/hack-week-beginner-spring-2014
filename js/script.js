@@ -1,17 +1,33 @@
-// Adds a to-do list item containing the text 'itemText' to the HTML
-function appendItem(itemText) {
-    // Create the HTML
+// Adds a to-do list item containing the text 'itemText' to the HTML. If
+// 'isChecked' is true, the item will be checked off.
+function appendItem(itemText, isChecked) {
     var item = $('<li>')
 
-    var itemText = $('<span/>').addClass('itemText').text(itemText);
+    var checkbox = $('<input/>', { type: 'checkbox' });
+
+    // Check the checkbox if we need to
+    checkbox.prop('checked', isChecked);
+
+    // Mark the item as checked if it's clicked
+    checkbox.click(function() {
+        markItem($(item), $(this).prop('checked'));
+        saveItems();
+    });
+    item.append(checkbox);
+
+    var itemText = $('<span/>', { class: 'itemText', text: itemText });
     item.append(itemText);
 
-    var deleteButton = $('<button/>').addClass('delete').text('Delete');
-    item.append(deleteButton);
+    var deleteButton = $('<button/>', { class: 'delete', text: 'Delete'});
 
+    // Remove the item from the checkbox if the delete button is clicked
     deleteButton.click(function() {
         removeItem($(item));
     });
+    item.append(deleteButton);
+
+    // We need to mark the item if it is checked
+    markItem(item, isChecked);
 
     $('#items').append(item);
 }
@@ -33,13 +49,28 @@ function removeItem(item) {
     saveItems();
 }
 
+// Mark an item as completed or not
+function markItem(item, isCompleted) {
+    var decoration = 'none';
+
+    if (isCompleted) {
+        decoration = 'line-through';
+    }
+
+    $(item).find('.itemText').css('text-decoration', decoration);
+}
+
 // Saves the current to-do list items to localStorage
 function saveItems() {
     var list = [];
 
     // Get only the text of each to-do list item
-    $('#items li span').each(function() {
-        list.push($(this).text());
+    $('#items li').each(function() {
+        var item = {};
+        item.text = $(this).find('span').text();
+        item.isChecked = $(this).find('input').prop('checked');
+
+        list.push(item);
     })
 
     localStorage['todo'] = JSON.stringify(list);
@@ -54,7 +85,7 @@ function loadItems() {
     var list = JSON.parse(localStorage['todo']);
 
     for (var i = 0; i < list.length; i++) {
-        appendItem(list[i]);
+        appendItem(list[i].text, list[i].isChecked);
     }
 }
 
