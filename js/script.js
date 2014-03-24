@@ -58,7 +58,7 @@ function loadItems() {
     }
 }
 
-$(function() {
+$(document).ready(function() {
     $('#add').on('click', addItem);
     loadItems();
 });
