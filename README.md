@@ -11,7 +11,9 @@ Good news: as long as you are using a [modern browser], there is no installation
 necessary!
 
 ## Running the App
-Open `index.html` in your browser to run the application.
+You can run the app [here][demo]. If you'd like the run the application locally,
+clone the repository and open `index.html` in your browser.
 
 [modern browser]: http://browsehappy.com
 [jQuery]: http://jquery.com
+[demo]: http://htmlpreview.github.io/?https://github.com/alokedesai/Hack-Week-Beginner-Spring-2014/blob/master/index.html
